@@ -12,6 +12,8 @@
 #ifndef JSON_ABSTRACT_FACTORY_H
 #define JSON_ABSTRACT_FACTORY_H
 
+#include "jsonable.h"
+
 namespace json {
 
 	/**

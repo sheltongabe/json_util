@@ -5,31 +5,31 @@
  * 
  * 
  *  @author		Gabriel Shelton	sheltongabe
- *  @date	07-15-2018
+ *  @date		  07-15-2018
  *  @version	0.1
  */
 
 #include "json_abstract_factory.h"
 
-using namespace json;
+namespace json {
+	//
+	// Default Constructor
+	//
+	JSONAbstractFactory::JSONAbstractFactory() {
 
-//
-// Default Constructor
-//
-JSONAbstractFactory::JSONAbstractFactory() {
+	}
 
-}
+	//
+	// Copy Constructor
+	//
+	JSONAbstractFactory::JSONAbstractFactory(JSONAbstractFactory& factory) {
 
-//
-// Copy Constructor
-//
-JSONAbstractFactory::JSONAbstractFactory(JSONAbstractFactory& factory) {
+	}
 
-}
+	//
+	// Destructor
+	//
+	JSONAbstractFactory::~JSONAbstractFactory() {
 
-//
-// Destructor
-//
-JSONAbstractFactory::~JSONAbstractFactory() {
-
+	}
 }
