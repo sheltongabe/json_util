@@ -35,3 +35,6 @@
 bin/
 build/
 docs/
+
+# Visual Studio Code Settings
+.vscode/
