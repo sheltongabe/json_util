@@ -15,6 +15,9 @@
 
 #include <string>
 #include <utility>
+#include <fstream>
+
+#include "json_exception.h"
 
 namespace json {
 	/**
@@ -54,10 +57,10 @@ namespace json {
 			 * 	-If the filename doesn't have an .json extension, add it and then read in the file
 			 * 	-From there read the file into a string and return the string w/ std::move
 			 * 
-			 * 	@param	std::string		Name of file that is being read in w/ or w/out .json
+			 * 	@param	std::string			  Name of file that is being read in w/ or w/out .json
 			 * 
-			 * 	@return   std::string	  The JSON read from the file
-			 * 	@return	  std::string	  Blank string if error
+			 * 	@return   std::string	  		The JSON read from the file
+			 * 	@throw	  JSONException	  if there is an error reading the file
 			 * 
 			 * 	@version 0.1
 			 */
@@ -68,16 +71,38 @@ namespace json {
 			 * 
 			 * 	-If the filename is missing .json extension add it, then write to the file
 			 * 	
-			 * 	@param	std::string		Name of the file to write to w/ or w/out file extension
-			 * 	@param	std::string		The data getting written to the file in a json format
+			 * 	@param	std::string				Name of the file to write to w/ or w/out file extension
+			 * 	@param	std::string				The data getting written to the file in a json format
 			 * 
-			 * 	@return	  bool				Did the data get written correctly
+			 * 	@return	  bool						Did the data get written correctly
+			 * 	@throw	  JSONException		If there was an error writing the data
 			 *  
 			 * 	@version 0.1
 			 */
 			static bool write(std::string filename, std::string text);
 
+			/**
+			 * 	@brief	Destructor
+			 * 
+			 * 	Details
+			 * 
+			 * 	@version 0.1
+			 */
+			~JSONFile();
+
 		private:
+			/**
+			 * 	@brief	Check if the given filename has the file extension
+			 * 
+			 * 	Details
+			 * 
+			 * 	@param	std::string			Name of the file
+			 * 
+			 * 	@return	  bool					If the file has the correct FILE_EXTENSION at the end
+			 * 
+			 * 	@version 0.1
+			 */
+			static bool checkExtension(std::string filename);
 	};
 }
 #endif
