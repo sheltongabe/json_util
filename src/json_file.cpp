@@ -12,6 +12,7 @@
 
 #include "json_file.h"
 
+#include <iostream>
 namespace json {
 	// Set Default File Extension
 	std::string JSONFile::FILE_EXTENSION = std::move(".json");
@@ -35,7 +36,7 @@ namespace json {
 	//
 	std::string JSONFile::read(std::string filename) {
 		// Check the file extension and correct if needed
-		if(checkExtension(filename))
+		if(!checkExtension(filename))
 			filename += JSONFile::FILE_EXTENSION;
 
 		// Variable to store the final output
@@ -46,9 +47,11 @@ namespace json {
 			// Variables to read in the data
 			std::string line;
 			std::ifstream jsonFile(filename);
+			std::cout << "Opening file: " << filename << std::endl;
 			
 			// Read the file, until you run out of file to read
 			while(std::getline(jsonFile, line)) {
+				std::cout << "Line: " << line << std::endl;
 				output += line;
 			}
 
@@ -57,6 +60,7 @@ namespace json {
 		// If there is an error, throw an JSONException telling that there was an
 		// error reading the file
 		catch(std::exception e) {
+			std::cout << "Could not open file" << std::endl;
 			throw JSONException("Error reading data in json file: " + filename);
 		}
 
@@ -69,7 +73,7 @@ namespace json {
 	//
 	bool JSONFile::write(std::string filename, std::string jsonData) {
 		// Check the file extension and correct if needed
-		if(checkExtension(filename))
+		if(!checkExtension(filename))
 			filename += JSONFile::FILE_EXTENSION;
 
 		// Open and write the json text to the file

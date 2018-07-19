@@ -28,7 +28,7 @@ namespace json {
 	// Initializing Constructor
 	//
 	JSONException::JSONException(std::string error) :
-			errorMessage(std::move(errorMessage)) {
+			errorMessage(std::move(error)) {
 
 	}
 

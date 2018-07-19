@@ -19,5 +19,6 @@ include_directories(${CMAKE_SOURCE_DIR}/include/)
 # Add json test executable
 add_executable(json
 	jsonable.cpp
-	json_abstract_factory.cpp
+	json_exception.cpp
+	json_file.cpp
 	main.cpp)
