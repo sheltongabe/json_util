@@ -5,7 +5,7 @@
 #	Builds the json_util project from src
 #
 #	@author		Gabriel Shelton		sheltongabe
-#	@date		  07-12-2018
+#	@date		  07-19-2018
 #	@version	0.1
 #
 
@@ -21,4 +21,6 @@ add_executable(json
 	jsonable.cpp
 	json_exception.cpp
 	json_file.cpp
+	json_parser.cpp
+	car.cpp
 	main.cpp)

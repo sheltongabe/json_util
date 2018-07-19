@@ -6,7 +6,7 @@
  * 	json::JSON which can be used to construct JSONAble objects
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-17-2018
+ *  @date		  07-19-2018
  *  @version	0.1
  */
 
@@ -18,6 +18,9 @@
 
 #include "json_exception.h"
 #include "jsonable.h"
+
+// Define function pointers for the RecursiveFunctions
+typedef json::JSONValue (*RecursiveFunction) (std::stringstream);
 
 namespace json {
 
@@ -74,9 +77,6 @@ namespace json {
 			~JSONParser();
 
 		protected:
-			/// The Characters that should be ignored in the JSON file
-			static std::vector<char> IGNORE_CHARACTERS;
-
 			/// Characters that mark the beginning or termination of a string
 			static std::vector<char> STRING_MARKERS;
 
@@ -87,7 +87,7 @@ namespace json {
 			static std::vector<std::string> BOOLEAN_STRINGS;
 
 			/// The characters that mark that a recurssive call is needed, and which call, passing std::stringstream
-			static std::map<char, void*> RECURSIVE_CHARACTERS;
+			static std::map<char, JSONValue(*) (std::stringstream&)> RECURSIVE_CHARACTERS;
 
 			/**
 			 * 	@brief 	The workhorse of parsing JSON from a stringstream that is made
@@ -101,20 +101,7 @@ namespace json {
 			 * 
 			 * 	@version 0.1
 			 */
-			static JSON recursiveJSONParser(std::stringstream s);
-
-			/**
-			 * 	@brief 	Clear out any characters from the stringstream marked in IGNORE_CHARACTERS
-			 * 
-			 * 	Removes characters from the stream until a character is encountered that is not
-			 * 	in IGNORE_CHARACTERS, at which point it puts the character back and ends
-			 * 
-			 * 	@param 	std::stringstream	stream to clear 
-			 * 	@return   char 						  Last character removed and reinserted
-			 * 
-			 * 	@version 0.1
-			 */
-			static char clearIgnoreCharacters(std::stringstream s);
+			static JSON recursiveJSONParser(std::stringstream& s);
 
 			/**
 			 * @brief		Read in a string object or read till a STRING_TERMINATOR character
@@ -124,7 +111,21 @@ namespace json {
 			 * 
 			 * 	@version 0.1
 			 */
-			static std::string getString(std::stringstream s);
+			static JSONValue getString(std::stringstream& s);
+
+			/**
+			 * 	@brief	Check to see if the passed value is in the passed vector
+			 * 
+			 * 	uses count in std::algorithm to see if the value is in the vector
+			 * 
+			 * 	@param		T			Value
+			 * 	@param		T			Vector containting type T
+			 * 	@return		  bool	   If value is in the vector
+			 * 
+			 * 	@version 0.1
+			 */
+			template <typename T>
+			static bool isIn(T value, std::vector<T>);
 
 		private:
 

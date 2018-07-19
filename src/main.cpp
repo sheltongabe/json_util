@@ -12,11 +12,18 @@
 #include <iostream>
 
 #include "json_file.h"
+#include "json_parser.h"
+#include "car.h"
 
 int main() {
 
 	std::string FILE_NAME = "test.json";
-	std::cout << json::JSONFile::read(FILE_NAME) << std::endl;
+	std::string testJson = json::JSONFile::read(FILE_NAME);
+
+	json::JSON j = json::JSONParser::parse(testJson);
+
+	Car c(j);
+	std::cout << c.toString();
 
 	return 0;
 }

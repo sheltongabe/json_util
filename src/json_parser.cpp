@@ -5,16 +5,15 @@
  * 	Details
  *  
  *  @author	First_Last_Name	username
- *  @date	07-17-2018
- *  @version	0.0
+ *  @date	07-19-2018
+ *  @version	0.1
  */
 
 #include "json_parser.h"
 
+#include <iostream>
 namespace json {
 	// ----- Initialize static variables used by the methods -----
-	// Characters that should be ignored like spaces, tabs, and newlines
-	std::vector<char> JSONParser::IGNORE_CHARACTERS = {};
 
 	// Characters that mark the beginning or termination of a string
 	std::vector<char> JSONParser::STRING_MARKERS = {'\'', '\"'};
@@ -28,11 +27,11 @@ namespace json {
 	};	
 
 	// A map between characters that should indicate a recursive call and will perform that call
-	std::map<char, void*> JSONParser::RECURSIVE_CHARACTERS = {
-		// Not necessarily recursive calls but can take advantage of the framework to build strings
-		{ '\"', JSONParser::getString },
-		{ '\'', JSONParser::getString }
+	std::map<char, JSONValue(*) (std::stringstream&)> JSONParser::RECURSIVE_CHARACTERS = {
+		{ '\'', JSONParser::getString },
+		{ '\"', JSONParser::getString }
 	};
+	// JSONParser::RECURSIVE_CHARACTERS['\"'] = JSONParser::getString;
 
 	//
 	// Default Constructor
@@ -59,34 +58,89 @@ namespace json {
 		JSON j = JSONParser::recursiveJSONParser(s);
 		return std::move(j);
 	}
-
 	//
 	// recursiveJSONParser (std::stringstream) -> JSON
 	//
-	JSON recursiveJSONParser(std::stringstream s) {
+	JSON JSONParser::recursiveJSONParser(std::stringstream& s) {
+		// Construct the JSON map for this round in the recursive function
+		JSON j;
+		// clear { that signifies the begining of an object
+		s.get();
 
-	}
+		// Loop until you finish this Object
+		while(s.peek() != '}') {
+			// Get the key for this iteration
+			std::string key = std::get<std::string>(getString(s));
 
-	// 
-	// clearIgnoreCharacters (std::stringstream) -> char
-	//
-	char clearIgnoreCharacters(std::stringstream s) {
-		// character to hold the char being pulled out of the stream
-		char tmp;
-		while(std::count(
-				JSONParser::IGNORE_CHARACTERS.begin(), 
-				JSONParser::IGNORE_CHARACTERS.end(), 
-				(tmp = s.get())) != 0) {
-			
+			// Skip the colon marking between the key and value
+			s.get();
+
+			// The value to pair with the key
+			JSONValue value;
+
+			// Peek the next character to see if you need to call a function
+			char starter = s.peek();
+			if(JSONParser::RECURSIVE_CHARACTERS.count(starter)) {
+				value = RECURSIVE_CHARACTERS[starter](s);
+			}
+			// The value is not one that is built by another function
+			else {
+				// Read everything after the colon into a string and start conversions
+				std::string v = std::get<std::string>(getString(s));
+
+				// Convert v -> value
+				// Only handles integers for right now
+				value = std::stoi(v);
+			}
+
+			// store value with the key
+			j.emplace(key, value);
+
+			// If there is a comma after the value, consume it
+			if(s.peek() == ',')
+				s.get();
 		}
-		s.unget();
+
+		// Get rid of the '}' marking the end of the object and return the JSON built
+		s.get();
+		return std::move(j);
 	}
 
 	//
 	// getString (std::stringstream) -> std::string
 	//
-	std::string getString(std::stringstream) {
+	JSONValue JSONParser::getString(std::stringstream& s) {
+		// Input helper variables
+		std::string input;
 
+		// If we are reading a string
+		if(JSONParser::isIn(static_cast<char>(s.peek()), JSONParser::STRING_MARKERS)) {
+			// Read until the next char is the flag again
+			char flag = s.get(), tmp;
+			while( (tmp = s.get()) != flag) {
+				input += tmp;
+			}
+		}
+		// If we are reading until a string terminator (reading non-string values)
+		else {
+			char tmp;
+			while(!JSONParser::isIn( (tmp = s.get() ), JSONParser::STRING_TERMINATERS)) {
+				input += tmp;
+			}
+		}
+
+		// return the input
+		return std::move(input);
+	}
+
+	//
+	// isIn (T, std::vector<T>) -> bool
+	//
+	template<typename T>
+	bool JSONParser::isIn(T value, std::vector<T> container) {
+		// Set iterators to the begining and end of the vector
+		auto begin = container.begin(), end = container.end();
+		return std::count(begin, end, value) > 0;
 	}
 
 	//

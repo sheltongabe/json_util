@@ -18,7 +18,7 @@
 
 namespace json {
 	// Defines JSONValues to be a variant
-	using JSONValue = std::variant<int, double>;
+	using JSONValue = std::variant<int, double, std::string>;
 
 	// Define JSON to be a map between string keys and JSONValues
 	using JSON = std::map<std::string, JSONValue>;
