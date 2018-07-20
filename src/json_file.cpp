@@ -52,7 +52,7 @@ namespace json {
 			// Read the file, until you run out of file to read
 			while(!jsonFile.eof()) {
 				jsonFile >> line;
-				s.str(s.str() + line);
+				s << line;
 			}
 
 			// close the stream and set the output
