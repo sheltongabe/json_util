@@ -6,7 +6,7 @@
  * 	-Purely static class, not meant to be instansiated
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-15-2018
+ *  @date		  07-19-2018
  *  @version	0.1
  */
 
@@ -52,7 +52,7 @@ namespace json {
 			// Read the file, until you run out of file to read
 			while(!jsonFile.eof()) {
 				jsonFile >> line;
-				s.str(s.str() + line);
+				s << line;
 			}
 
 			// close the stream and set the output
