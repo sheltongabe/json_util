@@ -5,7 +5,7 @@
  * 	Details
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-23-2018
+ *  @date		  07-26-2018
  *  @version	0.1
  */
 
@@ -14,6 +14,9 @@
 #include "json_text_builder.h"
 
 namespace json {
+
+	// Initialize static variables
+	int JSONTextBuilder::INITIAL_NUM_TABS = 0;
 
 	//
 	// Default Constructor
@@ -36,21 +39,45 @@ namespace json {
 		// Build the stringstream that will hold the text during the conversion
 		std::stringstream s;
 
-		// convert from object to string
-		std::string jsonText = JSONTextBuilder::parseObject(
-				j, s, JSONTextBuilder::INITIAL_NUM_TABS);
+		// convert from object to stringstream
+		JSONTextBuilder::parseObject(j, s, JSONTextBuilder::INITIAL_NUM_TABS);
 
 		// return the contents of the string
+		std::string jsonText = s.str();
 		return std::move(jsonText);		
 	}
 
 	//
 	// parseObject (JSON&, std::stringstream&, numTabs) -> void
 	//
-	void parseObject(JSON& j, std::stringstream& s, int numTabs) {
-		// Determine the type of each variable in the json moving key, by key, 
-		// and behave appropriately
+	void JSONTextBuilder::parseObject(JSON& j, std::stringstream& s, int& numTabs) {
+		// Place Object marker '{' and a new line into the stream and adjust numTabs
+		s << "{" << std::endl;
+		++numTabs;
+
+		// Get iterators to the begining and end of the map
 		auto begin = j.begin(), end = j.end();
+
+		// Move through the current layer of JSON (j) and call visit on each doing
+		// the appropriate thing for each type
+		for(auto current = begin; current != end; ) {
+			// Insert the appropriate number of tabs
+			for(int i = 0; i < numTabs; ++i)
+				s << "\t";
+
+			// Insert key and colon
+			s << "\"" << (current->first) << "\"" << " : ";
+
+			// Insert the appropriate JSON text
+			std::visit(JSONTextVisitor{s, numTabs}, current->second);
+
+			// If there is another key next then place a comma and a newline
+			if(++current != end)
+				s << "," << std::endl;
+		}
+
+		// End object
+		s << "\n}" << std::flush;
 	}
 
 	// 

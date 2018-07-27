@@ -13,6 +13,7 @@
 
 #include "json_file.h"
 #include "json_parser.h"
+#include "json_text_builder.h"
 #include "car.h"
 
 int main() {
@@ -22,8 +23,9 @@ int main() {
 
 	json::JSON j = json::JSONParser::parse(testJson);
 
-	Car c(j);
-	std::cout << c.toString();
+	Car c;
+	std::string defaultJSONText = json::JSONTextBuilder::parse(c.getJSON());
+	json::JSONFile::write(std::move("test_out.json"), defaultJSONText);
 
 	return 0;
 }
