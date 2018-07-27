@@ -36,5 +36,8 @@ bin/
 build/
 docs/
 
+# Library include directories
+include/json
+
 # Visual Studio Code Settings
 .vscode/

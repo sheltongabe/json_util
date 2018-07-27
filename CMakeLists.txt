@@ -5,7 +5,7 @@
 #	Builds the json_util project in its test modes
 #
 #	@author		Gabriel Shelton		sheltongabe
-#	@date		  07-12-2018
+#	@date		  07-27-2018
 #	@version	0.1
 #
 
@@ -19,6 +19,7 @@ set(CMAKE_CXX_FLAGS "${CXX_FLAGS} -ggdb -std=c++17")
 
 # Set build and Binary directories
 set(CMAKE_BINARY_OUTPUT ${PROJECT_SOURCE_DIR}/build/)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 
 # Compute the src

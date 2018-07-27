@@ -1,0 +1,39 @@
+##
+#	@file	CMakeLists.txt
+#	@brief	lib CMakeFile
+#
+#	Builds the json lib
+#
+#	@author		Gabriel Shelton		sheltongabe
+#	@date		  07-27-2018
+#	@version	0.1
+#
+
+cmake_minimum_required(VERSION 2.8)
+
+project(json_lib)
+
+# Configuration variables
+set(LIB_NAME "json")
+
+include_directories(${PROJECT_SOURCE_DIR}/include/)
+
+# Copy headers to project root include
+set(DIR_NAME ${CMAKE_SOURCE_DIR}/include/${LIB_NAME})
+file(MAKE_DIRECTORY ${DIR_NAME})
+file(GLOB LIB_HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
+file(COPY ${LIB_HEADERS} DESTINATION ${DIR_NAME})
+
+# Source filenames
+set(LIB_SOURCES 
+	"jsonable.cpp" 
+	"json_exception.cpp"
+	"json_file.cpp"
+	"json_parser.cpp"
+	"json_text_builder.cpp"
+)
+
+# Add json test executable
+add_library(${LIB_NAME} STATIC
+	${LIB_SOURCES}
+)
