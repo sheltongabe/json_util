@@ -11,6 +11,7 @@
  */
 
 #include "json_file.h"
+#include "jsonable.h"
 
 #include <sstream>
 namespace json {
@@ -29,6 +30,36 @@ namespace json {
 	//
 	JSONFile::JSONFile(JSONFile& copy) {
 
+	}
+
+	//
+	// readJSON (std::string) -> JSON
+	//
+	JSON JSONFile::readJSON(std::string filename) {
+		// Read the file into jsonText
+		std::string jsonText = JSONFile::read(filename);
+
+		// parse the JSON and then return the object
+		JSON j = JSONParser::parse(jsonText);
+		return std::move(j);
+	}
+
+	//
+	// writeJSON (std::string, JSON) -> bool
+	//
+	bool JSONFile::writeJSON(std::string filename, JSON j) {
+		// Parse the JSON with the text builder
+		std::string jsonText = JSONTextBuilder::parse(j);
+
+		// write it to the file using the internal method
+		return JSONFile::write(filename, jsonText);
+	}
+
+	//
+	// writeJSON (std::string, JSONAble) -> bool
+	//
+	bool JSONFile::writeJSON(std::string filename, JSONAble& object) {
+		return JSONFile::writeJSON(filename, object.getJSON());
 	}
 
 	// 

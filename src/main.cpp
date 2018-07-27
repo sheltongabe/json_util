@@ -10,6 +10,7 @@
  */
 
 #include <iostream>
+#include <utility>
 
 #include "json/json_file.h"
 #include "json/json_parser.h"
@@ -19,13 +20,13 @@
 int main() {
 
 	std::string FILE_NAME = "test.json";
-	std::string testJson = json::JSONFile::read(FILE_NAME);
 
-	json::JSON j = json::JSONParser::parse(testJson);
+	Car c(json::JSONFile::readJSON(FILE_NAME));
+	std::cout << c.toString();
 
-	Car c;
-	std::string defaultJSONText = json::JSONTextBuilder::parse(c.getJSON());
-	json::JSONFile::write(std::move("test_out.json"), defaultJSONText);
+	Car c1;
+	json::JSONFile::writeJSON(std::move("test_out1"), c1.getJSON());
+	json::JSONFile::writeJSON(std::move("test_out2.json"), c1);
 
 	return 0;
 }

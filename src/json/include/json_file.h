@@ -18,6 +18,8 @@
 #include <fstream>
 
 #include "json_exception.h"
+#include "json_parser.h"
+#include "json_text_builder.h"
 
 namespace json {
 	/**
@@ -50,6 +52,49 @@ namespace json {
 			 * 	@version	0.1
 			 */
 			JSONFile(JSONFile& copy);
+
+			/**
+			 * 	@brief 	Read the contents of the file, parse the JSON, and return
+			 * 
+			 * 	Use the internal read to read the contents of the file, and JSONParser to parse the json
+			 * 
+			 * 	@param 	std::string				filename 
+			 * 	@return   JSON 						JSON representation
+			 * 	@throw	  JSONException	   If there is an error reading the file or parsing it
+			 * 
+			 * 	@version 0.1
+			 */
+			static JSON readJSON(std::string filename);
+
+			/**
+			 * 	@brief 	Write the json-text for the JSON object passed into a file
+			 * 
+			 * 	Construct the json-text from the JSON object and write it to a file
+			 * 	using the internal write method
+			 * 
+			 * 	@param 	std::string						filename 
+			 * 	@param	JSON							  The JSON being written
+			 * 	@return   bool								 Whether or not the write suceeded
+			 * 	@throw	  JSONException			   If there was an error during writing
+			 * 
+			 * 	@version 0.1
+			 */
+			static bool writeJSON(std::string filename, JSON j);
+
+			/**
+			 * 	@brief 	Write the json-text for the JSONAble object passed into a file
+			 * 
+			 * 	Construct the json-text from the JSONAble object and write it to a file
+			 * 	using the internal write method
+			 * 
+			 * 	@param 	std::string						filename 
+			 * 	@param	JSONAble					  The JSONAble object being written
+			 * 	@return   bool								 Whether or not the write suceeded
+			 * 	@throw	  JSONException			   If there was an error during writing
+			 * 
+			 * 	@version 0.1
+			 */
+			static bool writeJSON(std::string filename, JSONAble& object);
 
 			/**
 			 * 	@brief	Read in a file (filename) and return its text in a single string to be parsed
