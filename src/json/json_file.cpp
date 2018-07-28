@@ -6,7 +6,7 @@
  * 	-Purely static class, not meant to be instansiated
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-19-2018
+ *  @date		  07-27-2018
  *  @version	0.1
  */
 
@@ -14,6 +14,7 @@
 #include "jsonable.h"
 
 #include <sstream>
+
 namespace json {
 	// Set Default File Extension
 	std::string JSONFile::FILE_EXTENSION = std::move(".json");

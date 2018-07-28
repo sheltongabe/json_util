@@ -14,6 +14,8 @@ cmake_minimum_required(VERSION 2.8)
 # Parent Project
 project(json_util)
 
+enable_testing()
+
 # Set the compiler to use c++17 and gdb for debugging
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS} -ggdb -std=c++17")
 
@@ -24,3 +26,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 
 # Compute the src
 add_subdirectory(src/)
+
+# Tests
+add_test(
+	NAME TEST_json_test
+	COMMAND json_test 0
+)
