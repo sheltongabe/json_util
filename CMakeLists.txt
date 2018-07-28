@@ -16,7 +16,7 @@ project(json_util)
 
 # Configure tests
 enable_testing()
-set(NUM_TESTS 100000)
+set(NUM_TESTS 1000)
 
 # Set the compiler to use c++17 and gdb for debugging
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS} -ggdb -std=c++17")
