@@ -1,12 +1,12 @@
 /**
- *  @file	test_object.cpp
- *  @brief	
+ *  @file		test_object.cpp
+ *  @brief	  Provide a test-bed to stress test the library	
  *  
- * 	Details
+ * 	Has stood up to 100,000 tests in a single run so far
  *  
- *  @author	First_Last_Name	username
- *  @date	07-27-2018
- *  @version	0.0
+ *  @author		Gabriel Shelton	sheltongabe
+ *  @date		  07-28-2018
+ *  @version	0.1
  */
 
 #include "test_object.h"
@@ -40,8 +40,8 @@ TestObject::TestObject(std::mt19937& rng) {
 	std::uniform_int_distribution<> char_generator(
 			TestObject::CHAR_RANGE.first, 
 			TestObject::CHAR_RANGE.second);
-	std::uniform_int_distribution<> strlenGenerator(1, 25);
-	std::uniform_int_distribution<> numMembersGenerator(1, 50);
+	std::uniform_int_distribution<> strlenGenerator(1, 50);
+	std::uniform_int_distribution<> numMembersGenerator(1, 100);
 	std::uniform_int_distribution<> typeGenerator(
 			0, TestObject::NUM_TYPES - 1);
 

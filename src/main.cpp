@@ -5,7 +5,7 @@
  * 
  * 
  * @author		Gabriel Shelton		sheltongabe
- * @date 		  07-19-2018
+ * @date 		  07-28-2018
  * @version		0.1
  */
 
@@ -13,10 +13,9 @@
 #include <utility>
 #include <random>
 
+// Include JSON headers
 #include "json/json_file.h"
-#include "json/json_parser.h"
-#include "json/json_text_builder.h"
-#include "car.h"
+
 #include "test_object.h"
 
 int main(int argc, char **argv) {
