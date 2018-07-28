@@ -24,7 +24,6 @@ add_subdirectory(json)
 
 # Add json test executable
 add_executable(${EXE_NAME}
-	car.cpp
 	test_object.cpp
 	main.cpp
 )
