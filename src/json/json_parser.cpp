@@ -1,17 +1,16 @@
 /**
- *  @file	json_parser.cpp
- *  @brief	
+ *  @file		json_parser.cpp
+ *  @brief	  Parse jsonText into a JSON map	
  *  
  * 	Details
  *  
- *  @author	First_Last_Name	username
- *  @date	07-19-2018
+ *  @author		Gabriel Shelton	sheltongabe
+ *  @date		  07-28-2018
  *  @version	0.1
  */
 
 #include "json_parser.h"
 
-#include <iostream>
 namespace json {
 	// ----- Initialize static variables used by the methods -----
 
@@ -127,6 +126,7 @@ namespace json {
 			while(!JSONParser::isIn( (tmp = s.get() ), JSONParser::STRING_TERMINATERS)) {
 				input += tmp;
 			}
+			s.unget();
 		}
 
 		// return the input
