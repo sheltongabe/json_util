@@ -11,22 +11,29 @@
 
 #include <iostream>
 #include <utility>
+#include <random>
 
 #include "json/json_file.h"
 #include "json/json_parser.h"
 #include "json/json_text_builder.h"
 #include "car.h"
+#include "test_object.h"
 
-int main() {
+int main(int argc, char **argv) {
+	// Setup for random
+	std::mt19937 rng;
+	rng.seed(std::random_device()());
 
-	std::string FILE_NAME = "test.json";
+	int testNum = (argc == 1)? 0 : std::stoi(std::string(argv[1]));
 
-	Car c(json::JSONFile::readJSON(FILE_NAME));
-	std::cout << c.toString();
+	// Test TestObject
+	TestObject object1(rng);
+	json::JSONFile::writeJSON(std::move("object.json"), object1);
 
-	Car c1;
-	json::JSONFile::writeJSON(std::move("test_out1"), c1.getJSON());
-	json::JSONFile::writeJSON(std::move("test_out2.json"), c1);
+	TestObject object2(json::JSONFile::readJSON(std::move("object.json")));
+
+	if(object1 != object2)
+		return 1;
 
 	return 0;
 }
