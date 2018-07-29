@@ -5,7 +5,7 @@
  * 	Details
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-26-2018
+ *  @date		  07-28-2018
  *  @version	0.1
  */
 
@@ -38,6 +38,7 @@ namespace json {
 	std::string JSONTextBuilder::parse(JSON j) {
 		// Build the stringstream that will hold the text during the conversion
 		std::stringstream s;
+		s.precision(JSONTextBuilder::PRECISION);
 
 		// convert from object to stringstream
 		JSONTextBuilder::parseObject(j, s, JSONTextBuilder::INITIAL_NUM_TABS);

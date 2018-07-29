@@ -9,6 +9,8 @@
  *  @version	0.1
  */
 
+#include <sstream>
+
 #include "test_object.h"
 
 std::string TestObject::MEMBER_PREFIX = "member_";
@@ -62,7 +64,21 @@ TestObject::TestObject(std::mt19937& rng) {
 			case INTEGER:
 				value = int_generator(rng);
 				break;
-			
+
+			case DOUBLE:
+			{
+				// Generate 2 integers cast as doubles
+				double v = static_cast<double>(
+						static_cast<double>(int_generator(rng)) / 
+						static_cast<double>(int_generator(rng)));
+				std::stringstream s;
+				s.precision(TestObject::PRECISION);
+				s << v;
+
+				s >> v;
+				value = v;
+				break;
+			}			
 			case STRING:
 				// determine the length of the string
 				int strlen = strlenGenerator(rng);
@@ -123,6 +139,7 @@ bool TestObject::operator==(const TestObject& other) const {
 	for(auto thisCur = this->members.begin(), otherCur = other.members.begin();
 			thisCur != this->members.end() && otherCur != other.members.end();
 			++thisCur, ++otherCur) {
+
 		if(thisCur->second != otherCur->second)
 			return false;
 	}

@@ -87,9 +87,15 @@ namespace json {
 				// Read everything after the colon into a string and start conversions
 				std::string v = std::get<std::string>(getString(s));
 
-				// Convert v -> value
-				// Only handles integers for right now
-				value = std::stoi(v);
+				// -----Convert v -> value-----
+				// Check for it being a double
+				if(v.find('.') != std::string::npos) {
+					value = std::stod(v);
+				}
+				else {
+					// Assume the type of integer
+					value = std::stoi(v);
+				}
 			}
 
 			// store value with the key

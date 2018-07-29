@@ -6,7 +6,7 @@
  * 	will stress test the json library 
  * 
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-27-2018
+ *  @date		  07-28-2018
  *  @version	0.1
  */
 
@@ -37,12 +37,16 @@ class TestObject : public json::JSONAble {
 		static constexpr std::pair<int, int> CHAR_RANGE = {97, 122};
 
 		/// Number of types
-		static const int NUM_TYPES = 2;
+		static const int NUM_TYPES = 3;
+
+		/// Precision of doubles generated
+		static const int PRECISION = 6;
 
 		/// Used by the random number generator to select the value stored
 		enum Type {
 			INTEGER = 0,
-			STRING = 1
+			DOUBLE = 1,
+			STRING = 2
 		};
 
 		/// Members being stored
