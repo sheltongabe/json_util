@@ -69,7 +69,13 @@ namespace json {
 		 */
 		template <typename T>
 		void operator()(T const& item) {
-			this->s << item;
+			// String representation for the item
+			std::string itemStr = std::to_string(item);
+			const char* itemC_Str = itemStr.c_str();
+
+			// Put the item into the stream char-by char
+			for(int i = 0; i < itemStr.length(); ++i)
+				s.put(itemC_Str[i]);
 		}
 		
 	};
