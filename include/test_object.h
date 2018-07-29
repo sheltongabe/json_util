@@ -6,7 +6,7 @@
  * 	will stress test the json library 
  * 
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-28-2018
+ *  @date		  07-29-2018
  *  @version	0.1
  */
 
@@ -40,7 +40,9 @@ class TestObject : public json::JSONAble {
 		static const int NUM_TYPES = 3;
 
 		/// Precision of doubles generated
-		static const int PRECISION = 6;
+		static const int PRECISION = 15;
+
+		static constexpr double EPSILON = 0.000001;
 
 		/// Used by the random number generator to select the value stored
 		enum Type {

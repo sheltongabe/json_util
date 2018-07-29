@@ -6,7 +6,7 @@
  *  to go from the JSON object and then to the string
  *  
  *  @author	  Gabriel Shelton	sheltongabe
- *  @date		07-28-2018
+ *  @date		07-29-2018
  *  @version  0.1
  */
 
@@ -127,7 +127,7 @@ namespace json {
 			static int INITIAL_NUM_TABS;
 
 			/// Precision for decimal numbers
-			static const int PRECISION = 6;
+			static const int PRECISION = 15;
 
 			/**
 			 * 	@brief 	Begin building the text form of an object into a stringstream and visiting as needed

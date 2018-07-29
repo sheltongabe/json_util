@@ -5,11 +5,14 @@
  * 	Has stood up to 100,000 tests in a single run so far
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-28-2018
+ *  @date		  07-29-2018
  *  @version	0.1
  */
 
 #include <sstream>
+
+// For abs value during double checks
+#include <cstdlib>
 
 #include "test_object.h"
 
@@ -139,8 +142,18 @@ bool TestObject::operator==(const TestObject& other) const {
 	for(auto thisCur = this->members.begin(), otherCur = other.members.begin();
 			thisCur != this->members.end() && otherCur != other.members.end();
 			++thisCur, ++otherCur) {
-
-		if(thisCur->second != otherCur->second)
+		// Check if the type is double
+		if(thisCur->second.index() == DOUBLE &&
+				otherCur->second.index() == DOUBLE) {
+			double thisDouble = std::get<double>(thisCur->second),
+					otherDouble = std::get<double>(otherCur->second);
+			
+			// Do the comparison with EPSILON
+			if(std::abs(std::abs(thisDouble) - std::abs(otherDouble)) > EPSILON)
+				return false;
+		}
+		// Any other types
+		else if(thisCur->second != otherCur->second)
 			return false;
 	}
 

@@ -35,6 +35,7 @@
 bin/
 build/
 docs/
+test/
 
 # Library include directories
 include/json

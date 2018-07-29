@@ -5,13 +5,15 @@
  * 
  * 
  * @author		Gabriel Shelton		sheltongabe
- * @date 		  07-28-2018
+ * @date 		  07-29-2018
  * @version		0.1
  */
 
 #include <iostream>
 #include <utility>
 #include <random>
+#include <string>
+#include <sys/stat.h>
 
 // Include JSON headers
 #include "json/json_file.h"
@@ -23,7 +25,7 @@ int main(int argc, char **argv) {
 	std::mt19937 rng;
 	rng.seed(std::random_device()());
 
-	int testNum = (argc == 1)? 0 : std::stoi(std::string(argv[1]));
+	int testNum = (argc != 2)? 0 : std::stoi(std::string(argv[1]));
 
 	// Test TestObject
 	TestObject object1(rng);
@@ -31,8 +33,21 @@ int main(int argc, char **argv) {
 
 	TestObject object2(json::JSONFile::readJSON(std::move("object.json")));
 
-	if(object1 != object2)
+	if(object1 != object2) {
+		// Create the fail directory
+		std::string dirName = std::move("fail_");
+		dirName += std::to_string(testNum);
+		if(mkdir(dirName.c_str(), 
+				S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
+			std::cout << "Failed to create dir" << std::endl;
+		}
+
+		// write fails
+		json::JSONFile::writeJSON((dirName + "/in.json").c_str(), object1);
+		json::JSONFile::writeJSON((dirName + "/out.json").c_str(), object2);
+
 		return 1;
+	}
 
 	return 0;
 }
