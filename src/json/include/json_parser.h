@@ -60,6 +60,19 @@ namespace json {
 		}
 
 		/**
+		 * 	@brief 	Operator overload for a bool case
+		 * 
+		 * 	Insert the bool paramater to the string stream
+		 * 
+		 * 	@param	bool const&		reference to string object
+		 * 
+		 */
+		void operator()(bool const& item) {
+			std::string itemStr = (item) ? "true" : "false";
+			this->s << itemStr;
+		}
+
+		/**
 		 * 	@brief 	Overload for the general case function call
 		 * 
 		 * 	Insert the contents of the paramater to the string stream	
@@ -77,7 +90,6 @@ namespace json {
 			for(int i = 0; i < itemStr.length(); ++i)
 				s.put(itemC_Str[i]);
 		}
-		
 	};
 
 	/**

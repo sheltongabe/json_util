@@ -5,8 +5,8 @@
  *	Define JSON representation and how to make an object JSONAble
  *
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-13-2018
- *  @version	0.1
+ *  @date		  07-29-2018
+ *  @version	0.2
  */
 
 #ifndef JSONABLE_H
@@ -18,7 +18,7 @@
 
 namespace json {
 	// Defines JSONValues to be a variant
-	using JSONValue = std::variant<int, double, std::string>;
+	using JSONValue = std::variant<int, double, std::string, bool>;
 
 	// Define JSON to be a map between string keys and JSONValues
 	using JSON = std::map<std::string, JSONValue>;

@@ -93,8 +93,20 @@ namespace json {
 				std::string v = std::get<std::string>(getString(s));
 
 				// -----Convert v -> value-----
+				// Check if it is a boolean
+				if(JSONTextParser::isIn(v, JSONTextParser::BOOLEAN_STRINGS)) {
+					// Find the index
+					int index = 0;
+					for(int i = 0; i < BOOLEAN_STRINGS.size(); ++i) {
+						if(BOOLEAN_STRINGS[i] == v)
+							index = i;
+					}
+
+					// calculate and store value
+					value = (index % 2 == 0) ? false : true;
+				}
 				// Check for it being a double
-				if(v.find('.') != std::string::npos) {
+				else if(v.find('.') != std::string::npos) {
 					value = std::stod(v);
 				}
 				else {
@@ -112,7 +124,14 @@ namespace json {
 		}
 
 		// Get rid of the '}' marking the end of the object and return the JSON built
-		s.get();
+		if(static_cast<char>(s.peek()) == '}')
+			s.get();
+		else
+			throw JSONException("Error parsing json Text");
+
+		// If there is a comma after the value, consume it
+		if(s.peek() == ',')
+			s.get();
 		return std::move(j);
 	}
 

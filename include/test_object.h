@@ -7,7 +7,7 @@
  * 
  *  @author		Gabriel Shelton	sheltongabe
  *  @date		  07-29-2018
- *  @version	0.1
+ *  @version	0.2
  */
 
 #ifndef TEST_OBJECT_H
@@ -37,7 +37,7 @@ class TestObject : public json::JSONAble {
 		static constexpr std::pair<int, int> CHAR_RANGE = {97, 122};
 
 		/// Number of types
-		static const int NUM_TYPES = 3;
+		static const int NUM_TYPES = 4;
 
 		/// Precision of doubles generated
 		static const int PRECISION = 15;
@@ -48,7 +48,8 @@ class TestObject : public json::JSONAble {
 		enum Type {
 			INTEGER = 0,
 			DOUBLE = 1,
-			STRING = 2
+			STRING = 2,
+			BOOLEAN = 3
 		};
 
 		/// Members being stored

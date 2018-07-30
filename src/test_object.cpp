@@ -45,6 +45,7 @@ TestObject::TestObject(std::mt19937& rng) {
 	std::uniform_int_distribution<> char_generator(
 			TestObject::CHAR_RANGE.first, 
 			TestObject::CHAR_RANGE.second);
+	std::uniform_int_distribution<> bool_generator(0, 1);
 	std::uniform_int_distribution<> strlenGenerator(1, 50);
 	std::uniform_int_distribution<> numMembersGenerator(1, 100);
 	std::uniform_int_distribution<> typeGenerator(
@@ -82,15 +83,23 @@ TestObject::TestObject(std::mt19937& rng) {
 				value = v;
 				break;
 			}			
+			
 			case STRING:
+			{
 				// determine the length of the string
 				int strlen = strlenGenerator(rng);
 
-				value = "";
+				value = static_cast<std::string>(std::move(""));
 				for(int j = 0; j < strlen; ++j) {
 					char c = char_generator(rng);
 					std::get<std::string>(value) += c;
 				}
+				break;
+			}
+
+			case BOOLEAN:
+				// store the value
+				value = (bool_generator(rng) == 0) ? false : true;
 				break;
 		}
 		this->members[key] = value;
