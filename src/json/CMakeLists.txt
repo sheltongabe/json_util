@@ -5,8 +5,8 @@
 #	Builds the json lib
 #
 #	@author		Gabriel Shelton		sheltongabe
-#	@date		  07-27-2018
-#	@version	0.1
+#	@date		  07-29-2018
+#	@version	0.2
 #
 
 cmake_minimum_required(VERSION 2.8)
@@ -30,7 +30,7 @@ set(LIB_SOURCES
 	"json_exception.cpp"
 	"json_file.cpp"
 	"json_parser.cpp"
-	"json_text_builder.cpp"
+	"json_text_parser.cpp"
 )
 
 # Add json test executable

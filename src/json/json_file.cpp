@@ -6,8 +6,8 @@
  * 	-Purely static class, not meant to be instansiated
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-27-2018
- *  @version	0.1
+ *  @date		  07-29-2018
+ *  @version	0.2
  */
 
 #include "json_file.h"
@@ -41,7 +41,7 @@ namespace json {
 		std::string jsonText = JSONFile::read(filename);
 
 		// parse the JSON and then return the object
-		JSON j = JSONParser::parse(jsonText);
+		JSON j = JSONTextParser::parse(jsonText);
 		return std::move(j);
 	}
 
@@ -50,7 +50,7 @@ namespace json {
 	//
 	bool JSONFile::writeJSON(std::string filename, JSON j) {
 		// Parse the JSON with the text builder
-		std::string jsonText = JSONTextBuilder::parse(j);
+		std::string jsonText = JSONParser::parse(j);
 
 		// write it to the file using the internal method
 		return JSONFile::write(filename, jsonText);

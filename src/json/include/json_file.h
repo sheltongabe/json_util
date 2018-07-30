@@ -6,8 +6,8 @@
  * 	-Files are taken in as a std::map and written out as valid json
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-15-2018
- *  @version	0.1
+ *  @date		  07-29-2018
+ *  @version	0.2
  */
 
 #ifndef JSON_FILE_H
@@ -18,8 +18,8 @@
 #include <fstream>
 
 #include "json_exception.h"
+#include "json_text_parser.h"
 #include "json_parser.h"
-#include "json_text_builder.h"
 
 namespace json {
 	/**
@@ -62,7 +62,7 @@ namespace json {
 			 * 	@return   JSON 						JSON representation
 			 * 	@throw	  JSONException	   If there is an error reading the file or parsing it
 			 * 
-			 * 	@version 0.1
+			 * 	@version 0.2
 			 */
 			static JSON readJSON(std::string filename);
 

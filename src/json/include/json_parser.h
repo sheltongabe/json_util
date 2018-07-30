@@ -1,35 +1,90 @@
 /**
  *  @file		json_parser.h
- *  @brief	  Serve as a static class to convert between string and json::JSON 	
+ *  @brief	  Describes how to build a json string from a JSON object
  *  
- * 	Store static methods that convert between a string in json format, and
- * 	json::JSON which can be used to construct JSONAble objects
+ * 	Use Recursive functions, and the visitor pattern,
+ *  to go from the JSON object and then to the string
  *  
- *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-19-2018
- *  @version	0.1
+ *  @author	  Gabriel Shelton	sheltongabe
+ *  @date		07-29-2018
+ *  @version  0.2
  */
 
 #ifndef JSON_PARSER_H
 #define JSON_PARSER_H
 
 #include <sstream>
-#include <algorithm>
 
-#include "json_exception.h"
 #include "jsonable.h"
 
-// Define function pointers for the RecursiveFunctions
-typedef json::JSONValue (*RecursiveFunction) (std::stringstream);
 
 namespace json {
 
 	/**
-	 * 	@class		JSONParser
-	 * 	@brief		A Pure static class that will handle conversions for json
+	 * 	@struct	JSONTextVisitor
+	 * 	@brief 	Define how the JSON object is visited
 	 * 
-	 * 	Have a public interface that calls protected, recursive functions that will parse
-	 * 	a json string to JSON (std::map<std::string, JSONValue>)
+	 * 	Overload the callable operator several times, for each type that is visited,
+	 * 	and a general one that takes an auto type for others.
+	 * 
+	 */
+	struct JSONTextVisitor {
+		/// The string stream that is being inserted into
+		std::stringstream& s;
+
+		/// The number of tabs to place before new lines
+		int numTabs;
+
+		/**
+		 * 	@brief 	Initializing Constructor
+		 * 
+		 * 	@param	stringstream	The stream to insert the json text to
+		 * 	@param	int						The number of tabs to place before a newline
+		 * 
+		 * 	@version 0.1
+		 */
+		JSONTextVisitor(std::stringstream& s, int& numTabs) :
+			s(s),
+			numTabs(numTabs) { }
+
+		/**
+		 * 	@brief 	Operator overload for a string case
+		 * 
+		 * 	Insert the string paramater to the string stream, w/ quotes
+		 * 
+		 * 	@param	std::string const&		reference to string object
+		 * 
+		 */
+		void operator()(std::string const& item) {
+			this->s << "\"" << item << "\"";
+		}
+
+		/**
+		 * 	@brief 	Overload for the general case function call
+		 * 
+		 * 	Insert the contents of the paramater to the string stream	
+		 * 
+		 * 	@param	T const&		reference to general object, type is auto determined
+		 * 
+		 */
+		template <typename T>
+		void operator()(T const& item) {
+			// String representation for the item
+			std::string itemStr = std::to_string(item);
+			const char* itemC_Str = itemStr.c_str();
+
+			// Put the item into the stream char-by char
+			for(int i = 0; i < itemStr.length(); ++i)
+				s.put(itemC_Str[i]);
+		}
+		
+	};
+
+	/**
+	 * 	@class		JSONParser
+	 * 	@brief		A pure static class that describes how to convert objects to json strings
+	 * 
+	 * 	Uses recursive functions to form the json string
 	 * 
 	 */
 	class JSONParser {
@@ -53,79 +108,43 @@ namespace json {
 			JSONParser(JSONParser& copy);
 
 			/**
-			 * 	@brief 	Convert valid json text to a JSON object that JSONAble objects can be built from
-			 * 
-			 * 	-Call protected method recursiveJSONParser in order to handle the work horse
-			 * 	of the conversion
-			 * 	-This method just stands as a public interface
-			 * 
-			 * 	@param		std::string	 			   jsonText 
-			 * 	@return 	  JSON 						  Object the text represented
-			 * 	@throw		  JSONException		  If there is an error in the parsing of the JSON
-			 * 
-			 *	@version 0.1
-			 */
-			static JSON parse(std::string jsonText);
-
-			/**
-			 * 	@brief 	Destructor
+			 * 	@brief	Destructor
 			 * 
 			 * 	Details
 			 * 
-			 * 	@version 0.1
+			 * 	@version	0.1
 			 */
 			~JSONParser();
 
+			/**
+			 * 	@brief 	Take a JSON and build a string
+			 * 
+			 * 	Call a recursive method that will start to build the JSON string
+			 * 
+			 * 	@param	JSON			JSON object to build the text from
+			 * 	@return  std::string 	The json string built
+			 * 
+			 * 	@version 0.1
+			 */
+			static std::string parse(JSON j);
+
 		protected:
-			/// Characters that mark the beginning or termination of a string
-			static std::vector<char> STRING_MARKERS;
-
-			/// Characters that mark that string reading should be terminated
-			static std::vector<char> STRING_TERMINATERS;
-
-			/// The strings that are valid boolean
-			static std::vector<std::string> BOOLEAN_STRINGS;
-
-			/// The characters that mark that a recurssive call is needed, and which call, passing std::stringstream
-			static std::map<char, JSONValue(*) (std::stringstream&)> RECURSIVE_CHARACTERS;
+			/// Initial number of tabs that is used when performing conversion
+			static int INITIAL_NUM_TABS;
 
 			/**
-			 * 	@brief 	The workhorse of parsing JSON from a stringstream that is made
+			 * 	@brief 	Begin building the text form of an object into a stringstream and visiting as needed
 			 * 
-			 * 	Parses the JSON potentially calling itself recursively, and provides the majority
-			 * 	of the work for the parsing returning eventually a moved JSON object
+			 * 	Use the visitor pattern to visit and get the type of the variant and act based on the type
+			 * 	retrieved, inserting it into the stringstream and formatting the json, as needed
 			 * 
-			 * 	@param		std::stringstream	JSON being parsed
-			 * 	@return		  JSON						 The object representation of the JSON
-			 * 	@throw		 JSONException		  If there is an error in the parsing of the JSON
+			 * 	@param	JSON& 				  The object being converted
+			 * 	@param	stringstream& 	The stream that the text is being inserted into
+			 * 	@param	int						  How many tabs are needed before each line
 			 * 
 			 * 	@version 0.1
 			 */
-			static JSON recursiveJSONParser(std::stringstream& s);
-
-			/**
-			 * @brief		Read in a string object or read till a STRING_TERMINATOR character
-			 * 
-			 * @param 	std::stringstream	stream to read from
-			 * @return    std::string 				string read in
-			 * 
-			 * 	@version 0.1
-			 */
-			static JSONValue getString(std::stringstream& s);
-
-			/**
-			 * 	@brief	Check to see if the passed value is in the passed vector
-			 * 
-			 * 	uses count in std::algorithm to see if the value is in the vector
-			 * 
-			 * 	@param		T			Value
-			 * 	@param		T			Vector containting type T
-			 * 	@return		  bool	   If value is in the vector
-			 * 
-			 * 	@version 0.1
-			 */
-			template <typename T>
-			static bool isIn(T value, std::vector<T>);
+			static void parseObject(JSON& j, std::stringstream& s, int& numTabs);
 
 		private:
 
