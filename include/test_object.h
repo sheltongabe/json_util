@@ -7,7 +7,7 @@
  * 
  *  @author		Gabriel Shelton	sheltongabe
  *  @date		  07-31-2018
- *  @version	0.3
+ *  @version	0.4
  */
 
 #ifndef TEST_OBJECT_H
@@ -37,7 +37,7 @@ class TestObject : public json::JSONAble {
 		static constexpr std::pair<int, int> CHAR_RANGE = {97, 122};
 
 		/// Number of types to generate from (not counting object or array)
-		static const int NUM_TYPES = 4;
+		static const int NUM_TYPES = 5;
 
 		/// Used for comparing doubles, if they are that close they are considered equal
 		static constexpr double EPSILON = 0.000001;
@@ -51,8 +51,9 @@ class TestObject : public json::JSONAble {
 			DOUBLE = 1,
 			STRING = 2,
 			BOOLEAN = 3,
-			JSON_OBJECT = 4,
-			JSON_ARRAY = 5
+			NULL_TYPE = 4,
+			JSON_OBJECT = 5,
+			JSON_ARRAY = 6
 		};
 
 		/// Members being stored
@@ -87,7 +88,7 @@ class TestObject : public json::JSONAble {
 		 * 	@param	std::mt19937& 	random number generator
 		 * 	@return	 JSONValue			 The value generated
 		 * 
-		 * 	@version 0.3
+		 * 	@version 0.4
 		 */
 		json::JSONValue generateBaseValue(std::mt19937& rng);
 

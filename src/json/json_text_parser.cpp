@@ -6,7 +6,7 @@
  *  
  *  @author		Gabriel Shelton	sheltongabe
  *  @date		  07-31-2018
- *  @version	0.3
+ *  @version	0.4
  */
 
 #include "json_text_parser.h"
@@ -169,6 +169,10 @@ namespace json {
 
 			// calculate and store value
 			value = (index % 2 == 0) ? false : true;
+		}
+		// Check for it being null
+		else if(v.find("null") != std::string::npos) {
+			value = std::monostate();
 		}
 		// Check for it being a double
 		else if(v.find('.') != std::string::npos) {

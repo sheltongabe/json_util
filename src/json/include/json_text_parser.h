@@ -112,7 +112,7 @@ namespace json {
 			 * @param 	std::stringstream	stream to read from
 			 * @return    JSONValue 			 string read in
 			 * 
-			 * 	@version 0.3
+			 * 	@version 0.4
 			 */
 			static JSONValue getValue(std::stringstream& s);
 

@@ -145,6 +145,12 @@ json::JSONValue TestObject::generateBaseValue(std::mt19937& rng) {
 			value = (bool_generator(rng) == 0) ? false : true;
 		}
 		break;
+
+		case NULL_TYPE:
+		{
+			value = std::monostate();
+		}
+		break;
 	}
 
 	return std::move(value);

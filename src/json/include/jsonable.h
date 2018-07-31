@@ -6,7 +6,7 @@
  *
  *  @author		Gabriel Shelton	sheltongabe
  *  @date		  07-31-2018
- *  @version	0.3
+ *  @version	0.4
  */
 
 #ifndef JSONABLE_H
@@ -21,8 +21,10 @@ namespace json {
 	class JSONObject;
 	// class JSONArray;  (future feature V_0.4)
 
-	/// Defines JSONValues to be a variant <int, double, string, bool>
-	using JSONValue = std::variant<int, double, std::string, bool, JSONObject>;
+	/// Defines JSONValues to be a variant
+	//	<int, double, string, bool, std::monostate (null), JSONObject>
+	using JSONValue = std::variant<
+			int, double, std::string, bool, std::monostate, JSONObject>;
 
 	/// Define JSON to be a map between string keys and JSONValues
 	using JSON = std::map<std::string, JSONValue>;
@@ -111,6 +113,6 @@ namespace json {
 			/// Move Constructor for JSON
 			JSONObject(JSON&& j) : JSON(j) { }
 	};
-
 } // namespace json
+
 #endif

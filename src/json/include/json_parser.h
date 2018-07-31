@@ -7,7 +7,7 @@
  *  
  *  @author	  Gabriel Shelton	sheltongabe
  *  @date		07-31-2018
- *  @version  0.3
+ *  @version  0.4
  */
 
 #ifndef JSON_PARSER_H
@@ -80,7 +80,7 @@ namespace json {
 			 * 	@param	stringstream& 	The stream that the text is being inserted into
 			 * 	@param	int						  How many tabs are needed before each line
 			 * 
-			 * 	@version 0.1
+			 * 	@version 0.4
 			 */
 			static void parseObject(JSON& j, std::stringstream& s, int& numTabs);
 
@@ -156,6 +156,19 @@ namespace json {
 			// Use existing infrastructure to parse the passed object and insert
 			// it into the string stream
 			json::JSONParser::parseObject(item, this->s, this->numTabs);
+		}
+
+		/**
+		 * 	@brief 	Operator overload for a std::monostate (null)
+		 * 
+		 * 	
+		 * 
+		 * 	@param	std::monostate const&		reference to monostate
+		 * 
+		 */
+		void operator()(std::monostate const& item) {
+			std::string nullString = std::move("null");
+			this->s << nullString;
 		}
 
 		/**
