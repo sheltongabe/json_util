@@ -90,7 +90,7 @@ namespace json {
 			 * 
 			 * 	@param		std::stringstream	JSON being parsed
 			 * 	@return		  JSON						 The object representation of the JSON
-			 * 	@throw		 JSONException		  If there is an error in the parsing of the JSON
+			 * 	@throw		  JSONException		  If there is an error in the parsing of the JSON
 			 * 
 			 * 	@version 0.3
 			 */
@@ -105,6 +105,16 @@ namespace json {
 			 * 	@version 0.1
 			 */
 			static JSONValue getString(std::stringstream& s);
+
+			/**
+			 * @brief		Get the value stored if it does not require a recurssive read or is not a string
+			 * 
+			 * @param 	std::stringstream	stream to read from
+			 * @return    JSONValue 			 string read in
+			 * 
+			 * 	@version 0.3
+			 */
+			static JSONValue getValue(std::stringstream& s);
 
 			/**
 			 * 	@brief	Check to see if the passed value is in the passed vector

@@ -78,7 +78,10 @@ namespace json {
 			std::string key = std::get<std::string>(getString(s));
 
 			// Skip the colon marking between the key and value
-			s.get();
+			if(static_cast<char>(s.peek()) == ':')
+				s.get();
+			else
+				throw JSONException("Error parsing Object in json text");
 
 			// The value to pair with the key
 			JSONValue value;
@@ -90,30 +93,8 @@ namespace json {
 			}
 			// The value is not one that is built by another function
 			else {
-				// Read everything after the colon into a string and start conversions
-				std::string v = std::get<std::string>(getString(s));
-
-				// -----Convert v -> value-----
-				// Check if it is a boolean
-				if(JSONTextParser::isIn(v, JSONTextParser::BOOLEAN_STRINGS)) {
-					// Find the index
-					int index = 0;
-					for(int i = 0; i < BOOLEAN_STRINGS.size(); ++i) {
-						if(BOOLEAN_STRINGS[i] == v)
-							index = i;
-					}
-
-					// calculate and store value
-					value = (index % 2 == 0) ? false : true;
-				}
-				// Check for it being a double
-				else if(v.find('.') != std::string::npos) {
-					value = std::stod(v);
-				}
-				else {
-					// Assume the type of integer
-					value = std::stoi(v);
-				}
+				// Get the value non-recursively
+				value = JSONTextParser::getValue(s);
 			}
 
 			// store value with the key
@@ -164,6 +145,41 @@ namespace json {
 
 		// return the input
 		return std::move(input);
+	}
+
+	//
+	// getValue (std::stringstream) -> JSONValue
+	//
+	JSONValue JSONTextParser::getValue(std::stringstream& s) {
+		// Read everything after the colon into a string and start conversions
+		std::string v = std::get<std::string>(getString(s));
+
+		// Value to return
+		JSONValue value;
+
+		// -----Convert v -> value-----
+		// Check if it is a boolean
+		if(JSONTextParser::isIn(v, JSONTextParser::BOOLEAN_STRINGS)) {
+			// Find the index
+			int index = 0;
+			for(int i = 0; i < BOOLEAN_STRINGS.size(); ++i) {
+				if(BOOLEAN_STRINGS[i] == v)
+					index = i;
+			}
+
+			// calculate and store value
+			value = (index % 2 == 0) ? false : true;
+		}
+		// Check for it being a double
+		else if(v.find('.') != std::string::npos) {
+			value = std::stod(v);
+		}
+		else {
+			// Assume the type of integer
+			value = std::stoi(v);
+		}
+
+		return std::move(value);
 	}
 
 	//
