@@ -5,8 +5,8 @@
  *	Define JSON representation and how to make an object JSONAble
  *
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-29-2018
- *  @version	0.2
+ *  @date		  07-31-2018
+ *  @version	0.3
  */
 
 #ifndef JSONABLE_H
@@ -17,10 +17,14 @@
 #include <vector>
 
 namespace json {
-	// Defines JSONValues to be a variant
-	using JSONValue = std::variant<int, double, std::string, bool>;
+	// Forward declare a class for arrays and objects
+	class JSONObject;
+	// class JSONArray;  (future feature V_0.4)
 
-	// Define JSON to be a map between string keys and JSONValues
+	/// Defines JSONValues to be a variant <int, double, string, bool>
+	using JSONValue = std::variant<int, double, std::string, bool, JSONObject>;
+
+	/// Define JSON to be a map between string keys and JSONValues
 	using JSON = std::map<std::string, JSONValue>;
 
 	/**
@@ -89,5 +93,24 @@ namespace json {
 
 		private:
 	};
+
+	/**
+	 * 	@class	JSONObject
+	 * 	@brief 	Define a pair of strings and JSONValues
+	 * 
+	 * 	Uses JSON as the definition of the JSONObject, but it has to be done like this
+	 * 	because, when JSONValues is defined the compiler is not yet aware of JSON
+	 * 
+	 * 	@version 0.3
+	 */
+	class JSONObject : public JSON { 
+		public:
+			/// Copy Constructor for JSON
+			JSONObject(JSON& j) : JSON(j) { }
+
+			/// Move Constructor for JSON
+			JSONObject(JSON&& j) : JSON(j) { }
+	};
+
 } // namespace json
 #endif

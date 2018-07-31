@@ -6,8 +6,8 @@
  * 	json::JSON which can be used to construct JSONAble objects
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-29-2018
- *  @version	0.2
+ *  @date		  07-31-2018
+ *  @version	0.3
  */
 
 #ifndef JSON_TEXT_PARSER_H
@@ -56,7 +56,7 @@ namespace json {
 			 * 	@return 	  JSON 						  Object the text represented
 			 * 	@throw		  JSONException		  If there is an error in the parsing of the JSON
 			 * 
-			 *	@version 0.1
+			 *	@version 0.3
 			 */
 			static JSON parse(std::string jsonText);
 
@@ -92,9 +92,9 @@ namespace json {
 			 * 	@return		  JSON						 The object representation of the JSON
 			 * 	@throw		 JSONException		  If there is an error in the parsing of the JSON
 			 * 
-			 * 	@version 0.2
+			 * 	@version 0.3
 			 */
-			static JSON recursiveObjectParser(std::stringstream& s);
+			static JSONValue recursiveObjectParser(std::stringstream& s);
 
 			/**
 			 * @brief		Read in a string object or read till a STRING_TERMINATOR character

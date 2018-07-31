@@ -6,8 +6,8 @@
  *  to go from the JSON object and then to the string
  *  
  *  @author	  Gabriel Shelton	sheltongabe
- *  @date		07-29-2018
- *  @version  0.2
+ *  @date		07-31-2018
+ *  @version  0.3
  */
 
 #ifndef JSON_PARSER_H
@@ -19,78 +19,8 @@
 
 
 namespace json {
-
-	/**
-	 * 	@struct	JSONTextVisitor
-	 * 	@brief 	Define how the JSON object is visited
-	 * 
-	 * 	Overload the callable operator several times, for each type that is visited,
-	 * 	and a general one that takes an auto type for others.
-	 * 
-	 */
-	struct JSONTextVisitor {
-		/// The string stream that is being inserted into
-		std::stringstream& s;
-
-		/// The number of tabs to place before new lines
-		int numTabs;
-
-		/**
-		 * 	@brief 	Initializing Constructor
-		 * 
-		 * 	@param	stringstream	The stream to insert the json text to
-		 * 	@param	int						The number of tabs to place before a newline
-		 * 
-		 * 	@version 0.1
-		 */
-		JSONTextVisitor(std::stringstream& s, int& numTabs) :
-			s(s),
-			numTabs(numTabs) { }
-
-		/**
-		 * 	@brief 	Operator overload for a string case
-		 * 
-		 * 	Insert the string paramater to the string stream, w/ quotes
-		 * 
-		 * 	@param	std::string const&		reference to string object
-		 * 
-		 */
-		void operator()(std::string const& item) {
-			this->s << "\"" << item << "\"";
-		}
-
-		/**
-		 * 	@brief 	Operator overload for a bool case
-		 * 
-		 * 	Insert the bool paramater to the string stream
-		 * 
-		 * 	@param	bool const&		reference to string object
-		 * 
-		 */
-		void operator()(bool const& item) {
-			std::string itemStr = (item) ? "true" : "false";
-			this->s << itemStr;
-		}
-
-		/**
-		 * 	@brief 	Overload for the general case function call
-		 * 
-		 * 	Insert the contents of the paramater to the string stream	
-		 * 
-		 * 	@param	T const&		reference to general object, type is auto determined
-		 * 
-		 */
-		template <typename T>
-		void operator()(T const& item) {
-			// String representation for the item
-			std::string itemStr = std::to_string(item);
-			const char* itemC_Str = itemStr.c_str();
-
-			// Put the item into the stream char-by char
-			for(int i = 0; i < itemStr.length(); ++i)
-				s.put(itemC_Str[i]);
-		}
-	};
+	// Forward declare the struct JSONTextVisitor for the parser
+	struct JSONTextVisitor;
 
 	/**
 	 * 	@class		JSONParser
@@ -140,10 +70,6 @@ namespace json {
 			 */
 			static std::string parse(JSON j);
 
-		protected:
-			/// Initial number of tabs that is used when performing conversion
-			static int INITIAL_NUM_TABS;
-
 			/**
 			 * 	@brief 	Begin building the text form of an object into a stringstream and visiting as needed
 			 * 
@@ -158,8 +84,98 @@ namespace json {
 			 */
 			static void parseObject(JSON& j, std::stringstream& s, int& numTabs);
 
+		protected:
+			/// Initial number of tabs that is used when performing conversion
+			static int INITIAL_NUM_TABS;
+
 		private:
 
+	};
+
+	/**
+	 * 	@struct	JSONTextVisitor
+	 * 	@brief 	Define how the JSON object is visited
+	 * 
+	 * 	Overload the callable operator several times, for each type that is visited,
+	 * 	and a general one that takes an auto type for others.
+	 * 
+	 */
+	struct JSONTextVisitor {
+		/// The string stream that is being inserted into
+		std::stringstream& s;
+
+		/// The number of tabs to place before new lines
+		int numTabs;
+
+		/**
+		 * 	@brief 	Initializing Constructor
+		 * 
+		 * 	@param	stringstream	The stream to insert the json text to
+		 * 	@param	int						The number of tabs to place before a newline
+		 * 
+		 * 	@version 0.1
+		 */
+		JSONTextVisitor(std::stringstream& s, int& numTabs) :
+			s(s),
+			numTabs(numTabs) { }
+
+		/**
+		 * 	@brief 	Operator overload for a string case
+		 * 
+		 * 	Insert the string paramater to the string stream, w/ quotes
+		 * 
+		 * 	@param	std::string const&		reference to string object
+		 * 
+		 */
+		void operator()(std::string const& item) {
+			this->s << "\"" << item << "\"";
+		}
+
+		/**
+		 * 	@brief 	Operator overload for a bool case
+		 * 
+		 * 	Insert the bool paramater to the string stream
+		 * 
+		 * 	@param	bool const&		reference to bool object
+		 * 
+		 */
+		void operator()(bool const& item) {
+			std::string itemStr = (item) ? "true" : "false";
+			this->s << itemStr;
+		}
+
+		/**
+		 * 	@brief 	Operator overload for a JSONObject case
+		 * 
+		 * 	
+		 * 
+		 * 	@param	json::JSONObject const&		reference to JSONObject object
+		 * 
+		 */
+		void operator()(JSONObject& item) {
+			// Use existing infrastructure to parse the passed object and insert
+			// it into the string stream
+			json::JSONParser::parseObject(item, this->s, this->numTabs);
+		}
+
+		/**
+		 * 	@brief 	Overload for the general case function call
+		 * 
+		 * 	Insert the contents of the paramater to the string stream	
+		 * 
+		 * 	@param	T const&		reference to general object, type is auto determined
+		 * 
+		 */
+		template <typename T>
+		void operator()(T const& item) {
+			// String representation for the item
+			std::string itemStr = std::to_string(item);
+			const char* itemC_Str = itemStr.c_str();
+
+			// Put the item into the stream char-by char
+			for(int i = 0; i < itemStr.length(); ++i)
+				s.put(itemC_Str[i]);
+		}
 	};
 }
 #endif

@@ -5,8 +5,8 @@
  * 	Details
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-29-2018
- *  @version	0.2
+ *  @date		  07-31-2018
+ *  @version	0.3
  */
 
 #include "json_text_parser.h"
@@ -29,7 +29,8 @@ namespace json {
 	// A map between characters that should indicate a recursive call and will perform that call
 	std::map<char, JSONValue(*) (std::stringstream&)> JSONTextParser::RECURSIVE_CHARACTERS = {
 		{ '\'', JSONTextParser::getString },
-		{ '\"', JSONTextParser::getString }
+		{ '\"', JSONTextParser::getString },
+		{ '{', JSONTextParser::recursiveObjectParser }
 	};
 
 	//
@@ -54,13 +55,13 @@ namespace json {
 		std::stringstream s(jsonText);
 
 		// Call the recursiveJSONTextParser and return the built JSON project
-		JSON j = JSONTextParser::recursiveObjectParser(s);
+		JSON j = std::get<JSONObject>(JSONTextParser::recursiveObjectParser(s));
 		return std::move(j);
 	}
 	//
 	// recursiveObjectParser (std::stringstream) -> JSON
 	//
-	JSON JSONTextParser::recursiveObjectParser(std::stringstream& s) {
+	JSONValue JSONTextParser::recursiveObjectParser(std::stringstream& s) {
 		// Construct the JSON map for this round in the recursive function
 		JSON j;
 
@@ -129,9 +130,11 @@ namespace json {
 		else
 			throw JSONException("Error parsing json Text");
 
-		// If there is a comma after the value, consume it
+		// If there is a comma after the object, consume it
 		if(s.peek() == ',')
 			s.get();
+
+		// Return object
 		return std::move(j);
 	}
 

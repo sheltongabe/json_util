@@ -6,8 +6,8 @@
  * 	will stress test the json library 
  * 
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-29-2018
- *  @version	0.2
+ *  @date		  07-31-2018
+ *  @version	0.3
  */
 
 #ifndef TEST_OBJECT_H
@@ -36,24 +36,60 @@ class TestObject : public json::JSONAble {
 		/// Range for chars
 		static constexpr std::pair<int, int> CHAR_RANGE = {97, 122};
 
-		/// Number of types
+		/// Number of types to generate from (not counting object or array)
 		static const int NUM_TYPES = 4;
 
-		/// Precision of doubles generated
-		static const int PRECISION = 15;
-
+		/// Used for comparing doubles, if they are that close they are considered equal
 		static constexpr double EPSILON = 0.000001;
+
+		/// Percent chance, out of 100 to generate an object
+		static constexpr double CHANCE_FOR_OBJECT = 0.01;
 
 		/// Used by the random number generator to select the value stored
 		enum Type {
 			INTEGER = 0,
 			DOUBLE = 1,
 			STRING = 2,
-			BOOLEAN = 3
+			BOOLEAN = 3,
+			JSON_OBJECT = 4,
+			JSON_ARRAY = 5
 		};
 
 		/// Members being stored
 		std::map<std::string, json::JSONValue> members;
+
+		/**
+		 * 	@brief 	Populate the members function
+		 * 
+		 * 	@param std::mt19937&	random number generator
+		 * 	@return std::map<std::string
+		 */
+
+		/**
+		 * 	@brief 	Generate a JSONValue based with all types as an option
+		 * 
+		 * 	Sees if it should build and return a JSONObject, or Basetype
+		 * 	BaseType = <int, double, std::string, bool>
+		 * 
+		 * 	@param	std::mt19937& 	random number generator
+		 * 	@return	 JSONValue			 The value generated
+		 * 
+		 * 	@version 0.3
+		 */
+		json::JSONValue generateValue(std::mt19937& rng);
+
+		/**
+		 * 	@brief 	Generate a BaseType <int, double, std::string, bool>
+		 * 
+		 * 	Builds random generators as needed
+		 * 	Only generate what is needed for the type that is randomly selected
+		 * 
+		 * 	@param	std::mt19937& 	random number generator
+		 * 	@return	 JSONValue			 The value generated
+		 * 
+		 * 	@version 0.3
+		 */
+		json::JSONValue generateBaseValue(std::mt19937& rng);
 
 	public:
 		/**
@@ -70,7 +106,7 @@ class TestObject : public json::JSONAble {
 		 * 
 		 * 	Initialize the members of the object with the random items
 		 * 
-		 * 	@version	0.1
+		 * 	@version	0.3
 		 */
 		TestObject(std::mt19937& rng);
 
@@ -109,7 +145,7 @@ class TestObject : public json::JSONAble {
 		 * 	@param		TestObject& 	other
 		 * 	@return 	  bool					If the object is equal
 		 * 
-		 * 	@version 0.1
+		 * 	@version 0.3
 		 */
 		bool  operator==(const TestObject& other) const;
 

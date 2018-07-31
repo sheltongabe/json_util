@@ -5,8 +5,8 @@
  * 	Details
  *  
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-29-2018
- *  @version	0.2
+ *  @date		  07-31-2018
+ *  @version	0.3
  */
 
 #include <iomanip>
@@ -78,6 +78,7 @@ namespace json {
 
 		// End object
 		s << "\n}" << std::flush;
+		--numTabs;
 	}
 
 	// 
