@@ -19,9 +19,6 @@
 #include "json_exception.h"
 #include "jsonable.h"
 
-// Define function pointers for the RecursiveFunctions
-typedef json::JSONValue (*RecursiveFunction) (std::stringstream);
-
 namespace json {
 
 	/**
@@ -92,9 +89,23 @@ namespace json {
 			 * 	@return		  JSON						 The object representation of the JSON
 			 * 	@throw		  JSONException		  If there is an error in the parsing of the JSON
 			 * 
-			 * 	@version 0.3
+			 * 	@version 0.4
 			 */
 			static JSONValue recursiveObjectParser(std::stringstream& s);
+
+			/**
+			 * 	@brief 	Recursively turns jsonText arrays into JSONArray (vector) returned
+			 * 
+			 * 	Parses the JSONArray potentially calling itself recursively, and 
+			 * 	returning eventually, a moved JSONArray object
+			 * 
+			 * 	@param		std::stringstream	JSON being parsed
+			 * 	@return		  JSONArray				 The object representation of the JSONArray
+			 * 	@throw		  JSONException		  If there is an error in the parsing of the JSON
+			 * 
+			 * 	@version 0.4
+			 */
+			static JSONValue recursiveArrayParser(std::stringstream& s);
 
 			/**
 			 * @brief		Read in a string object or read till a STRING_TERMINATOR character
@@ -107,14 +118,24 @@ namespace json {
 			static JSONValue getString(std::stringstream& s);
 
 			/**
-			 * @brief		Get the value stored if it does not require a recurssive read or is not a string
+			 * @brief		Get the value stored 
 			 * 
-			 * @param 	std::stringstream	stream to read from
-			 * @return    JSONValue 			 string read in
+			 * @param 	std::stringstream&	 stream to read from
+			 * @return    JSONValue 			  	Value read in
 			 * 
 			 * 	@version 0.4
 			 */
 			static JSONValue getValue(std::stringstream& s);
+
+			/**
+			 * @brief		Get the value stored if it does not require a recurssive read or is not a string
+			 * 
+			 * @param 	std::stringstream&	 stream to read from
+			 * @return    JSONValue 			 	string read in
+			 * 
+			 * 	@version 0.4
+			 */
+			static JSONValue getBaseValue(std::stringstream& s);
 
 			/**
 			 * 	@brief	Check to see if the passed value is in the passed vector

@@ -6,7 +6,7 @@
  *  
  *  @author		Gabriel Shelton	sheltongabe
  *  @date		  07-31-2018
- *  @version	0.3
+ *  @version	0.4
  */
 
 #include <iomanip>
@@ -40,7 +40,8 @@ namespace json {
 		std::stringstream s;
 
 		// convert from object to stringstream
-		JSONParser::parseObject(j, s, JSONParser::INITIAL_NUM_TABS);
+		int numTabs = JSONParser::INITIAL_NUM_TABS;
+		JSONParser::parseObject(j, s, numTabs);
 
 		// return the contents of the string
 		std::string jsonText = s.str();
@@ -74,11 +75,55 @@ namespace json {
 			// If there is another key next then place a comma and a newline
 			if(++current != end)
 				s << "," << std::endl;
+			else
+				s << std::endl;
 		}
 
 		// End object
-		s << "\n}" << std::flush;
 		--numTabs;
+		for(int i = 0; i < numTabs; ++i)
+			s << "\t";
+		s << "}" << std::flush;
+	}
+
+	//
+	// parseArray (JSONArray&, std::stringstream&, numTabs&) -> void
+	//
+	void JSONParser::parseArray(
+			JSONArray& array, std::stringstream& s, int& numTabs) {
+		// Insert array marker
+		s << "[" << std::endl;
+		++numTabs;
+
+		// Move the appropriate number of tabs and begin visiting along the array
+		// adding commas between elements, but not at the end
+		for(int i = 0; i < numTabs; ++i)
+			s << "\t";
+		
+		// Iterator to the end of the array
+		auto end = array.end();
+
+		// Loop through the array, visiting as needed, and adding formatting
+		// Do nothing in the 3 term of the for loop, because current will be advanced in the loop
+		for(auto current = array.begin(); current < end; ) {
+			// Insert the current item into the stringstream
+			for(int i = 0; i < numTabs; ++i)
+				s << "\t";
+			std::visit(JSONTextVisitor{s, numTabs}, *current);
+
+			// advance current and check if a comma is needed
+			if(++current != end)
+				s << "," << std::endl;
+			else
+				s << std::endl;
+		}
+		
+		// decrement numTabs and output array end
+		--numTabs;
+		for(int i = 0; i < numTabs; ++i)
+			s << "\t";
+		s << "]";
+
 	}
 
 	// 

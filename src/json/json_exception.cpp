@@ -51,7 +51,7 @@ namespace json {
 	//
 	// getErrorMessage () -> std::string
 	//
-	std::string JSONException::getErrorMessage() const {
+	inline std::string JSONException::getErrorMessage() const {
 		return this->errorMessage;
 	}
 

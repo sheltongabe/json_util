@@ -84,6 +84,20 @@ namespace json {
 			 */
 			static void parseObject(JSON& j, std::stringstream& s, int& numTabs);
 
+			/**
+			 * 	@brief 	Begin building the text form of an array into a stringstream and visiting as needed
+			 * 
+			 * 	Use the visitor pattern to visit and get the type of the variant and act based on the type
+			 * 	retrieved, inserting it into the stringstream and formatting the json, as needed
+			 * 
+			 * 	@param	JSONArray& 		  The array being converted
+			 * 	@param	stringstream& 	The stream that the text is being inserted into
+			 * 	@param	int						   How many tabs are needed before each line
+			 * 
+			 * 	@version 0.4
+			 */
+			static void parseArray(JSONArray& j, std::stringstream& s, int& numTabs);
+
 		protected:
 			/// Initial number of tabs that is used when performing conversion
 			static int INITIAL_NUM_TABS;
@@ -156,6 +170,20 @@ namespace json {
 			// Use existing infrastructure to parse the passed object and insert
 			// it into the string stream
 			json::JSONParser::parseObject(item, this->s, this->numTabs);
+		}
+
+		/**
+		 * 	@brief 	Operator overload for a JSONArray case
+		 * 
+		 * 	
+		 * 
+		 * 	@param	json::JSONArray const&		reference to JSONArray object
+		 * 
+		 */
+		void operator()(JSONArray& item) {
+			// Use existing infrastructure to parse the passed array and insert
+			// it into the string stream
+			json::JSONParser::parseArray(item, this->s, this->numTabs);
 		}
 
 		/**

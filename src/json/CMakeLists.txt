@@ -5,8 +5,8 @@
 #	Builds the json lib
 #
 #	@author		Gabriel Shelton		sheltongabe
-#	@date		  07-29-2018
-#	@version	0.2
+#	@date		  08-02-2018
+#	@version	0.4
 #
 
 cmake_minimum_required(VERSION 2.8)
@@ -27,6 +27,7 @@ file(COPY ${LIB_HEADERS} DESTINATION ${DIR_NAME})
 # Source filenames
 set(LIB_SOURCES 
 	"jsonable.cpp" 
+	"json_compare.cpp"
 	"json_exception.cpp"
 	"json_file.cpp"
 	"json_parser.cpp"

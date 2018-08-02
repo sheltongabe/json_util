@@ -19,7 +19,7 @@ namespace json {
 	std::vector<char> JSONTextParser::STRING_MARKERS = {'\'', '\"'};
 
 	// Mark that string reading should be terminated in getString
-	std::vector<char> JSONTextParser::STRING_TERMINATERS = { ',', '}' };
+	std::vector<char> JSONTextParser::STRING_TERMINATERS = { ',', '}', ']' };
 
 	// Valid boolean strings ordered so if you mod 2 their index you get the 1 or 0 bool value
 	std::vector<std::string> JSONTextParser::BOOLEAN_STRINGS = {
@@ -30,7 +30,8 @@ namespace json {
 	std::map<char, JSONValue(*) (std::stringstream&)> JSONTextParser::RECURSIVE_CHARACTERS = {
 		{ '\'', JSONTextParser::getString },
 		{ '\"', JSONTextParser::getString },
-		{ '{', JSONTextParser::recursiveObjectParser }
+		{ '{', JSONTextParser::recursiveObjectParser },
+		{ '[', JSONTextParser::recursiveArrayParser }
 	};
 
 	//
@@ -84,18 +85,7 @@ namespace json {
 				throw JSONException("Error parsing Object in json text");
 
 			// The value to pair with the key
-			JSONValue value;
-
-			// Peek the next character to see if you need to call a function
-			char starter = s.peek();
-			if(JSONTextParser::RECURSIVE_CHARACTERS.count(starter)) {
-				value = RECURSIVE_CHARACTERS[starter](s);
-			}
-			// The value is not one that is built by another function
-			else {
-				// Get the value non-recursively
-				value = JSONTextParser::getValue(s);
-			}
+			JSONValue value = JSONTextParser::getValue(s);
 
 			// store value with the key
 			j.emplace(key, value);
@@ -117,6 +107,42 @@ namespace json {
 
 		// Return object
 		return std::move(j);
+	}
+
+	//
+	// recursiveArrayParser (std::stringstream&) -> JSONValue
+	//
+	JSONValue JSONTextParser::recursiveArrayParser(std::stringstream& s) {
+		// Get rid of Array marker
+		if(static_cast<char>(s.peek()) == '[')
+			s.get();
+		else
+			throw JSONException("Error parsing Array");
+
+		// Array to store in
+		JSONArray array;
+
+		// Loop until array ends
+		while(static_cast<char>(s.peek()) != ']') {
+			// Grab the value
+			array.push_back(std::move(JSONTextParser::getValue(s)));
+
+			// If there is a comma consume it
+			if(static_cast<char>(s.peek()) == ',')
+				s.get();
+		}
+
+		// get rid of the array end marker
+		if(static_cast<char>(s.peek()) == ']')
+			s.get();
+		else
+			throw JSONException("Error parsing array");
+
+		// Get rid of trailing commas
+		if(static_cast<char>(s.peek()) == ',')
+			s.get();
+
+		return std::move(array);
 	}
 
 	//
@@ -151,6 +177,27 @@ namespace json {
 	// getValue (std::stringstream) -> JSONValue
 	//
 	JSONValue JSONTextParser::getValue(std::stringstream& s) {
+		// Value to store to
+		JSONValue value;
+
+		// Peek the next character to see if you need to call a function
+		char starter = s.peek();
+		if(JSONTextParser::RECURSIVE_CHARACTERS.count(starter)) {
+			value = RECURSIVE_CHARACTERS[starter](s);
+		}
+		// The value is not one that is built by another function
+		else {
+			// Get the value non-recursively
+			value = JSONTextParser::getBaseValue(s);
+		}
+
+		return std::move(value);
+	}
+
+	//
+	// getBaseValue (std::stringstream&) -> JSONValue
+	//
+	JSONValue JSONTextParser::getBaseValue(std::stringstream& s) {
 		// Read everything after the colon into a string and start conversions
 		std::string v = std::get<std::string>(getString(s));
 

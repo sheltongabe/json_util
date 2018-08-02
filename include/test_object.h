@@ -6,7 +6,7 @@
  * 	will stress test the json library 
  * 
  *  @author		Gabriel Shelton	sheltongabe
- *  @date		  07-31-2018
+ *  @date		  08-02-2018
  *  @version	0.4
  */
 
@@ -17,6 +17,7 @@
 #include <utility>
 
 #include "json/jsonable.h"
+#include "json/json_compare.h"
 
 /**
  * 	@class		TestObject
@@ -39,11 +40,11 @@ class TestObject : public json::JSONAble {
 		/// Number of types to generate from (not counting object or array)
 		static const int NUM_TYPES = 5;
 
-		/// Used for comparing doubles, if they are that close they are considered equal
-		static constexpr double EPSILON = 0.000001;
-
 		/// Percent chance, out of 100 to generate an object
 		static constexpr double CHANCE_FOR_OBJECT = 0.01;
+
+		/// Percent chance, out of 100 to generate an array
+		static constexpr double CHANCE_FOR_ARRAY = 0.01;
 
 		/// Used by the random number generator to select the value stored
 		enum Type {
@@ -134,9 +135,9 @@ class TestObject : public json::JSONAble {
 		 *
 		 * 	Convert the object members to a JSON map and return
 		 *
-		 * 	@version 0.1
+		 * 	@version 0.4
 		 */
-		virtual json::JSON getJSON();
+		virtual json::JSON getJSON() const;
 
 		/**
 		 * 	@brief	Compare and return if the two objects are equal
@@ -146,7 +147,7 @@ class TestObject : public json::JSONAble {
 		 * 	@param		TestObject& 	other
 		 * 	@return 	  bool					If the object is equal
 		 * 
-		 * 	@version 0.3
+		 * 	@version 0.4
 		 */
 		bool  operator==(const TestObject& other) const;
 

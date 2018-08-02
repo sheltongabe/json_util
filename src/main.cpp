@@ -6,7 +6,7 @@
  * 
  * @author		Gabriel Shelton		sheltongabe
  * @date 		  07-29-2018
- * @version		0.1
+ * @version		0.4
  */
 
 #include <iostream>
@@ -27,11 +27,14 @@ int main(int argc, char **argv) {
 
 	int testNum = (argc != 2)? 0 : std::stoi(std::string(argv[1]));
 
+	// ----- Tests -----
 	// Test TestObject
 	TestObject object1(rng);
 	json::JSONFile::writeJSON(std::move("object.json"), object1);
 
 	TestObject object2(json::JSONFile::readJSON(std::move("object.json")));
+
+	std::cout << "object1 == object2: " << (object1 == object2) << std::endl;
 
 	if(object1 != object2) {
 		// Create the fail directory
@@ -45,7 +48,6 @@ int main(int argc, char **argv) {
 		// write fails
 		json::JSONFile::writeJSON((dirName + "/in.json").c_str(), object1);
 		json::JSONFile::writeJSON((dirName + "/out.json").c_str(), object2);
-
 		return 1;
 	}
 
