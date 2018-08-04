@@ -15,16 +15,15 @@ will, such as streamed to a nodejs server.
 Install for the project should be fairly straight forward, depending on your setup.  
 The simplest is one that mirrors that of a unix based system, which is how I myself
 designed the library to be used and implemented.  My directories are for example:
-Preformatted
->	bin/				-> Any binary or executables generated
->	build/			   -> All of the build and compile files, navigate to this and run "cmake .."
->	docs/			   -> Where the documentation is stored
->	include/		 -> Global include for your src too, and cmake will copy the required headers into a folder named json_util
->	lib/				  -> Where the library is outputed, and any other libraries used would be placed
->	src/				 -> Your source code for the library
->	test/				 -> Code to test, and store the results for the test
->		...
->	...
+* >	bin/				-> Any binary or executables generated
+* >	build/			   -> All of the build and compile files, navigate to this and run "cmake .."
+* >	docs/			   -> Where the documentation is stored
+* >	include/		 -> Global include for your src too, and cmake will copy the required headers into a folder named json_util
+* >	lib/				  -> Where the library is outputed, and any other libraries used would be placed
+* >	src/				 -> Your source code for the library
+* >	test/				 -> Code to test, and store the results for the test
+* >		...
+* >	...
 
 
 The idea is you clone the repo into your src/, then just make sure you set the 
@@ -33,14 +32,13 @@ An example can be this project.
 
 
 Explantions out of the way, to directly copy this project and see an example in action:
-Preformatted
->git clone ...							  // Clone the project to a chosen directory
->cd project								// Navigate into the project
->mkdir build && cd build/	// make and navigate into the build directory
->cmake ..								 // After confirming that the cmake settings are what you want run the cmake script
->make									  // Compile the library, which will go into lib, and the executable which will go
->												// into bin
->make test							   // If you wish to run the tests
+* >git clone ...							  // Clone the project to a chosen directory
+* >cd project								// Navigate into the project
+* >mkdir build && cd build/	// make and navigate into the build directory
+* >cmake ..								 // After confirming that the cmake settings are what you want run the cmake script
+* >make									  // Compile the library, which will go into lib, and the executable which will go
+* >												// into bin
+* >make test							   // If you wish to run the tests
 
 
 Now you have a fully functional example to work off of, and could feasibly clone the repo into your project
