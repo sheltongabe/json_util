@@ -1,12 +1,12 @@
 /**
- * @file 		main.cpp
+ * @file 		json_util_test.cpp
  * @brief	  serve as the entry point of the program
  * 
  * 
  * 
  * @author		Gabriel Shelton		sheltongabe
  * @date 		  07-29-2018
- * @version		0.4
+ * @version		0.5
  */
 
 #include <iostream>
@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 
 // Include JSON headers
-#include "json/json_file.h"
+#include "json_util/json_file.h"
 
 #include "test_object.h"
 

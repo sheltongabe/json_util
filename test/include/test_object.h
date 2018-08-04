@@ -16,8 +16,8 @@
 #include <random>
 #include <utility>
 
-#include "json/jsonable.h"
-#include "json/json_compare.h"
+#include "json_util/jsonable.h"
+#include "json_util/json_compare.h"
 
 /**
  * 	@class		TestObject
@@ -41,10 +41,10 @@ class TestObject : public json::JSONAble {
 		static const int NUM_TYPES = 5;
 
 		/// Percent chance, out of 100 to generate an object
-		static constexpr double CHANCE_FOR_OBJECT = 0.01;
+		static constexpr double CHANCE_FOR_OBJECT = 0.005;
 
 		/// Percent chance, out of 100 to generate an array
-		static constexpr double CHANCE_FOR_ARRAY = 0.01;
+		static constexpr double CHANCE_FOR_ARRAY = 0.005;
 
 		/// Used by the random number generator to select the value stored
 		enum Type {

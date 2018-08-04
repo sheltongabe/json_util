@@ -1,32 +1,44 @@
 ##
-#	@file	CMakeLists.txt
-#	@brief	src CMakeFile
+#	@file	  CMakeLists.txt
+#	@brief	Build the json_library
 #
-#	Builds the json_util project from src
+#	Builds the json lib static and shared, with the name of json_util
 #
 #	@author		Gabriel Shelton		sheltongabe
-#	@date		  07-27-2018
-#	@version	0.1
+#	@date		  08-04-2018
+#	@version	0.5
 #
 
 cmake_minimum_required(VERSION 2.8)
 
-project(src)
+message("${JSON_LIB_NAME}")
 
-# Configure executable settings
-set(EXE_NAME "json_test")
+project("{$JSON_LIB_NAME}_src")
 
-# Include neccassary headers from the top-level include file
-include_directories(${CMAKE_SOURCE_DIR}/include/)
+# Configuration variables
+set(HEADERS_DIR ${PROJECT_SOURCE_DIR}/../include)
 
-# Build the json library
-add_subdirectory(json)
+# Include headers
+include_directories(${HEADERS_DIR})
 
-# Add json test executable
-add_executable(${EXE_NAME}
-	test_object.cpp
-	main.cpp
+# Copy headers to project root include, after building a folder for the library in 
+# root include
+set(DIR_NAME ${CMAKE_SOURCE_DIR}/include/${JSON_LIB_NAME})
+file(MAKE_DIRECTORY ${DIR_NAME})
+file(GLOB LIB_HEADERS ${HEADERS_DIR}/*.h)
+file(COPY ${LIB_HEADERS} DESTINATION ${DIR_NAME})
+
+# Source filenames
+set(LIB_SOURCES 
+	"jsonable.cpp" 
+	"json_compare.cpp"
+	"json_exception.cpp"
+	"json_file.cpp"
+	"json_parser.cpp"
+	"json_text_parser.cpp"
 )
 
-# Link the executable with the json library
-target_link_libraries(${EXE_NAME} "json")
+# Add static library
+add_library("${JSON_LIB_NAME}_static" STATIC
+	${LIB_SOURCES}
+)

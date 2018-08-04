@@ -35,10 +35,10 @@
 bin/
 build/
 docs/
-test/
+test/results/
 
 # Library include directories
-include/json
+include/json_util
 
 # Visual Studio Code Settings
 .vscode/
