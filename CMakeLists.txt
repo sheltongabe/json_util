@@ -1,39 +1,54 @@
 ##
-#	@file	CMakeLists.txt
-#	@brief	Parent CMakeFile
+# @file		CMakeLists.txt [/]
+# @brief	Setup The library if it is being used and executable
 #
-#	Builds the json_util project in its test modes
-#
-#	@author		Gabriel Shelton		sheltongabe
-#	@date		  08_04-2018
-#	@version	0.5
-#
+# @author	sheltongabe		Gabriel Shelton
+# @date 	2019-03-06
 
 cmake_minimum_required(VERSION 2.8)
 
-# Configure library name
-set(JSON_LIB_NAME "json_util")
+###################################################
+# Parameters for the project
+# Should this project compile a library
+set(COMPILE_LIB "y")
 
-# Parent Project
-project("${JSON_LIB_NAME}")
+# Should this project compile an executable
+set(COMPILE_EXECUTABLE "y")
+###################################################
 
 
-# Testing settings (comment out to disable testing for json_util)
-enable_testing()
-include(CTest)
 
-# Set the compiler to use c++17 and gdb for debugging
-set(CMAKE_CXX_FLAGS "${CXX_FLAGS} -ggdb -std=c++17")
+# This will set the project to be a executable
+# Sets if it will try and compile the test section
+if(COMPILE_EXECUTABLE)
+	include(cmake/Root.cmake)
+endif(COMPILE_EXECUTABLE)
 
-# Set Build, Binary, and Library output directories; along with test working dir
-set(CMAKE_BINARY_OUTPUT ${PROJECT_SOURCE_DIR}/build/)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
+# Set required compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++17")
 
-# Build the library
-add_subdirectory(src)
+# Handle Library
+if(COMPILE_LIB)
+	# Set library name
+	# Set both the name and value of the library name.
+	set(LIB_NAME "json_util")
 
-# If testing is enabled build the test program and tests
-if(BUILD_TESTING)
-	add_subdirectory(test/src)
-endif()
+	# Start the project for the library
+	project("${LIB_NAME}")
+
+	# Add the library
+	add_subdirectory(src)
+endif(COMPILE_LIB)
+
+# Insert Dependency Includes here
+
+# Handle Executable
+if(COMPILE_EXECUTABLE)
+	# Allow for tests
+	include(CTest)
+
+	# If it is an executable project compile the executable section
+	if(BUILD_TESTING)
+		add_subdirectory(test/src)
+	endif()
+endif(COMPILE_EXECUTABLE)
